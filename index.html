@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/4.3.1/sketchy/bootstrap.min.css">
+    <title>OAuth firebase</title>
+</head>
+<body>
+    <h1>Autenticación y manejo de reglas de firestore</h1>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="signIn" data-toggle="modal" data-target="#signInModal">Sign In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="signUp" data-toggle="modal" data-target="#signUpModal">Sign Up</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="logOut">Log Out</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <!-- aqui va los pesonajes -->
+    <div class="row" id="contenedor">
+            
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="signInModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Iniciar sesion en la aplicación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formSingIn">
+                        <div class="form-group">
+                            <label for="correoE">Correo</label>
+                            <input type="text" name="" id="correoE" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="passwordE">Contraseña</label>
+                            <input type="password" name="" id="passwordE" required class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-secondary btn-block">Sign In</button>
+                        <button type="button" class="btn btn-danger btn-block" id="loginGoogle">Iniciar sesión con google</button>
+                        <button type="button" class="btn btn-info btn-block" id="loginFace">Iniciar sesión con Facebook</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Registro de la aplicación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formSingUp">
+                        <div class="form-group">
+                            <label for="correo">Correo</label>
+                            <input type="text" name="" id="correo" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Contraseña</label>
+                            <input type="password" name="" id="password" required class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Sign Up</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+        <!-- firebase -->
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
+    
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-firestore.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyCDfS4gljEkNwL3Qdp9yzXfEgfZ1ys7n8Y",
+            authDomain: "firstdb-ca2eb.firebaseapp.com",
+            databaseURL: "https://firstdb-ca2eb.firebaseio.com",
+            projectId: "firstdb-ca2eb",
+            storageBucket: "firstdb-ca2eb.appspot.com",
+            messagingSenderId: "739050580846",
+            appId: "1:739050580846:web:cfc6835ba568a52720ef7f",
+            measurementId: "G-E929W80JH8"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+        const auth = firebase.auth()
+        const db = firebase.firestore();
+    </script>
+    
+    <!-- <script src="insertar.js"></script> -->
+    <!-- <script src="OAuth.js"></script> -->
+    <!-- <script src="OAuth2.js"></script> -->
+    <script src="OAuth3.js"></script>
+</body>
+</html>
